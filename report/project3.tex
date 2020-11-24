@@ -1,0 +1,247 @@
+%\documentclass[12pt]{article}
+\documentclass[a4paper]{article}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{float}
+\usepackage[makeroom]{cancel} %
+\usepackage[english]{babel}
+\usepackage{textcomp}
+\usepackage{gensymb} %
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{caption}
+%\usepackage{hyperref}
+%\usepackage{physics}
+%\usepackage{dsfont}
+%\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{units}
+\usepackage{bm}
+
+% From Eirik's .tex
+\usepackage{epstopdf}
+\usepackage{cite}
+\usepackage{braket}
+\usepackage{url}
+\bibliographystyle{unsrt}
+
+\usepackage{algorithmicx}
+\usepackage{algorithm}% http://ctan.org/pkg/algorithms
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
+
+\usepackage[margin=1cm]{caption}
+\usepackage[outer=1.2in,inner=1.2in]{geometry}
+
+% Finding overfull \hbox
+\overfullrule=2cm
+
+\lstset{language=IDL}
+ %\lstset{alsolanguage=c++}
+\lstset{basicstyle=\ttfamily\small}
+ %\lstset{backgroundcolor=\color{white}}
+\lstset{frame=single}
+\lstset{stringstyle=\ttfamily}
+\lstset{keywordstyle=\color{red}\bfseries}
+\lstset{commentstyle=\itshape\color{blue}}
+\lstset{showspaces=false}
+\lstset{showstringspaces=false}
+\lstset{showtabs=false}
+\lstset{breaklines}
+\lstset{aboveskip=20pt,belowskip=20pt}
+
+\lstset{basicstyle=\footnotesize, basewidth=0.5em}
+\lstdefinestyle{cl}{frame=none,basicstyle=\ttfamily\small}
+\lstdefinestyle{pr}{frame=single,basicstyle=\ttfamily\small}
+\lstdefinestyle{prt}{frame=none,basicstyle=\ttfamily\small}
+% \lstinputlisting[language=Python]{filename}
+
+
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{magenta}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{pystyle}{
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{dkgreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{gray},
+  stringstyle=\color{codepurple},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2
+}
+
+\lstset{language=[90]Fortran,
+  basicstyle=\small\ttfamily,
+  keywordstyle=\color{red},
+  commentstyle=\color{blue},
+  stringstyle=\color{dkgreen},
+  morecomment=[l]{!\ },
+  numbers=left,
+  numbersep=5pt
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Self made macros here yaaaaaay
+\newcommand\answer[1]{\underline{\underline{#1}}}
+\newcommand\pd[2]{\frac{\partial #1}{\partial #2}}
+\newcommand\red[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+% Usage: \numberthis \label{name}
+% Referencing: \eqref{name}
+
+% Some matrices
+\newcommand\smat[1]{\big(\begin{smallmatrix}#1\end{smallmatrix}\big)}
+\newcommand\ppmat[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Eirik's self made macros
+\newcommand{\s}{^{*}}
+\newcommand{\V}[1]{\mathbf{#1}}
+\newcommand{\husk}[1]{\color{red} #1 \color{black}}
+\newcommand{\E}[1]{\cdot 10^{#1}}
+\newcommand{\e}[1]{\ \text{#1}}
+\newcommand{\tom}[1]{\big( #1 \big)}
+\newcommand{\Tom}[1]{\Big( #1 \Big)}
+\newcommand{\tomH}[1]{\big[ #1 \big] }
+\newcommand{\TomH}[1]{\Big[ #1 \Big]}
+\newcommand{\tomK}[1]{ \{ #1 \} }
+\newcommand{\TomK}[1]{\Big\lbrace #1 \Big\rbrace}
+\newcommand{\bigabs}[1]{\left| #1 \right|}
+
+% Practical macros for FYS-STK4155
+\newcommand{\XX}{\mathbf{X}}
+\newcommand{\II}{\textbf{I}}
+\newcommand{\T}{\mathsf{T}}
+
+\newcommand{\Ey}{\mathbb{E}[\bm{\tilde y}]}
+\newcommand{\xx}{\mathbf{x}}
+\newcommand{\ee}{\bm{\epsilon}}
+\newcommand{\yy}{\bm{\tilde y}}
+\newcommand{\pr}{\text{Pr}}
+\newcommand{\Nepochs}{N_{\text{epochs}}}
+\newcommand{\Nbs}{N_{\text{bs}}}
+\newcommand{\Nhn}{N_{h,\text{nodes}}}
+\newcommand{\Nhl}{N_{h,\text{layers}}}
+
+
+% Section labeling
+%\usepackage{titlesec}% http://ctan.org/pkg/titlesec
+%\renewcommand{\thesubsection}{\arabic{subsection}}
+
+% Title/name/date
+\title{FYS-STK4155: Project 2}
+\author{Simen Nyhus Bastnes}
+\date{13. November 2020}
+
+\begin{document}
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+In this project, we want to study a few methods commonly used in data science for both normal regression problems, as well as classification problems. The methods we will be employing are the stochastic gradient descent (SGD) and feed-forward neural networks (FFNN). For regression, we will be looking at is the Franke function studied in the previous project \cite{Github1}, comparing our results to the ones found there. For classification the MNIST database of handwritten digits will be studied. Cross-validation will be used for the hyperparameter search for both problems in order to make sure the model is the optimal one.
+%
+For the Franke function, we found that both SGD and FFNN performed worse than both OLS and Ridge, however their $R^2$ scores, $0.84$ and $0.93$ respectively, indicate that the results are not too terrible, at least not for the neural network.
+%
+For the MNIST data set, both the SGD and FFNN performed very well, with an accuracy of $\sim 95$\%, surpassing the results gotten with Scikit-Learn. The FFNN results are a bit weird as it seems to converge extremely fast, with very few nodes in the network.
+
+\end{abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+In the last two decades, computation power and availability of said machines has increased drastically, making it possible to employ more and more complex methods of solving both regression and classification problems.
+\\\\
+In this project, we will be looking at two different methods of performing regression and classification, and see how they compare against each other. For regression, we can also compare to the results we found in Project 1 \cite{Github1}. The methods we will be looking at is the stochastic gradient descent and a feed-forward neural network. These methods contain a few hyperparameters that will need to be adjusted in order to find the best model. In order to remove some dependency on the exact training/test data split, we will employ $k$-fold cross-validation during the hyperparameter search.
+\\\\
+The data sets we will be looking at is the Franke function from \cite{Franke}, as well as a reduced MNIST data set \cite{MNIST} consisting of approximately 1800 handwritten digits.
+First, in Chapter \ref{chap:theory} we will briefly introduce the theory of logistic regression, and then go more in depth on stochastic gradient descent and artificial neural networks. A more in-depth description of the data sets can be found in Chapter \ref{chap:data_sets}. Then, in Chapter \ref{chap:results} we go through the results of both the Franke function and the MNIST data set, while discussing them.
+Finally, we conclude our findings in Chapter \ref{chap:conclusion}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Theory} \label{chap:theory}
+%\red{Logistic regression with softmax check aurelion geron page 195ish}
+%For the derivation of the OLS method, Ridge, and Lasso regression, we will follow Chapter 2.3 and 3.4 of Hastie et al. \cite{Hastie}
+\subsection{Decision trees} \label{sec:dec_tree}
+\red{No feature normalization needed}
+\\\\
+\red{you can fit it extremely well to train data, asking many questions and including all data, but that leads to overfitting, which is why random forests are good}
+
+
+\begin{algorithm}[H]
+\caption{Stochastic Gradient descent}
+\begin{algorithmic}[1]
+%\State Given $\XX$, $y$, $\beta^{(0)}$, $\eta$
+\For{$i = 0$, $N_{\text{epochs}}-1$}
+\State Shuffle $\XX_{\text{train}}$ and $y_{\text{train}}$
+\State Split into $N_{\text{mb}}$ minibatches
+\For{$j=0$, $N_{\text{mb}}$}
+\State Compute gradient using minibatch $j$
+\State Update $\beta$
+\EndFor
+%\State (Update learning rate $\eta$ if not using constant learning rate)
+%\State $\beta^{(i+1)} = \beta^{(i)} - \eta \nabla_i$
+\EndFor
+\end{algorithmic}
+\label{alg:sgd}
+\end{algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data sets} \label{chap:data_sets}
+In this project, we will be using two different data sets. The first, is the Franke function we looked at in the previous project \cite{Github1}. The equation for the Franke function can be found there and in \cite{Franke}. This function is a two-dimensional function that has been widely used for testing implementations for regression and interpolation.
+\\\\
+%
+The second data set is the so-called MNIST data set \cite{MNIST}, which is a large data set consisting of handwritten digits from 0 to 9, and is commonly used for testing various types of classification methods. The original data set consists of 70 000 images of size $28\times28$ pixels. However, as the scope of this project is fairly limited, we will be looking at a reduced version of the data set both in size and resolution in order to have time to produce results. The specific version of the data set we will be using is the one available within the scikit-learn python package, and consists of 1797 images of size $8\times8$ pixels. Figure \ref{fig:digits} shows an example of some of the images in the data set. For the full resolution MNIST data set, human accuracy has been noted to be roughly $0.2$\%, according to \cite{c2012}. However, given the reduction in resolution, it is not unlikely that it would be somewhat lower for the data set we will be looking at.
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[scale=0.6]{../figures/digits.png}
+%	\caption{Some of the images in the reduced MNIST data set, with their label printed above.}
+%	\label{fig:digits}
+%\end{figure}
+%\red{MNIST, show example plot of some of the 8x8 images with labels}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results and discussion} \label{chap:results}
+The code used to generate the results presented in this section can be found in the Github repository \cite{Github2}. For both data sets, we employ cross-validation when searching for the hyperparameters. The results section will be split into, the first one pertaining to the Franke function, while the second contains the analysis of the MNIST data set
+\\\\
+For simplicity, for all the neural network results we will deal with hidden layers consisting of identical amount of nodes, using the same activation functions for all layers. Strictly speaking there is nothing stopping us from having arbitrary choices of amount of nodes for the layers in the network, and some neural net structures (like for example autoencoders) rely on that. Taking this into account drastically increases the potential things to test, and is thus outside of the scope of this report.
+
+
+\subsection{Future work} \label{sec:future}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion} \label{chap:conclusion}
+In this project, we set out to investigate how stochastic gradient descent and feed-forward neural networks work on both regression and classification problems. We used cross-validation in order to assess which of the hyperparameter combinations gave the best fit.
+\\\\
+For the Franke function, we found that both SGD and FFNN performed worse than OLS and Ridge, though the neural net got much closer, with an $R^2$ score of $0.93$, while SGD got $0.84$, none of which are bad. For both, we found that the largest number of epochs $\Nepochs = 100$ and the largest learning rate $\eta=0.1$ gave the best results. SGD preferred a batch size of 5, with no regularization for $p=8$, and $\lambda=0.001$ at $p=15$, showing similar behavior with how OLS and Ridge performed for those polynomial degrees. The neural net yielded much better results as the batch size is increased. Based on tests, it seems that using either one of the ReLu family activation functions would have improved the results.
+\\\\
+For the classification case, where we studied a reduced version of the MNIST data set, both the SGD and Neural net performed exceedingly well, outperforming the equivalent Scikit-Learn implementation. The SGD implementation gave an accuracy of 96\%, which starts to approach what you would expect from human accuracy. SKL was within a percent point away from it. The NN code yielded an accuracy of 95\%, but doing so with only 10 epochs and 10 nodes in the singular hidden layer. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliography{references}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

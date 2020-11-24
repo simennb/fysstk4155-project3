@@ -1,0 +1,26 @@
+\begin{thebibliography}{1}
+
+\bibitem{Github1}
+Git{H}ub repository, {P}roject 1.
+\newblock \url{https://github.com/simennb/fysstk4155-project1}.
+
+\bibitem{Franke}
+Richard Franke.
+\newblock A critical comparison of some methods for interpolation of scattered
+  data, 1979.
+
+\bibitem{MNIST}
+{MNIST} handwritten digit database, {Yann LeCun} {Corinna Cortes} and {Chris
+  Burges}.
+\newblock \url{http://yann.lecun.com/exdb/mnist/}.
+
+\bibitem{c2012}
+Dan Ciresan, Ueli Meier, and Juergen Schmidhuber.
+\newblock \textit{Multi-column {Deep} {Neural} {Networks} for {Image
+  Classification}}, 2012.
+
+\bibitem{Github2}
+Git{H}ub repository, {P}roject 2.
+\newblock \url{https://github.com/simennb/fysstk4155-project2}.
+
+\end{thebibliography}
