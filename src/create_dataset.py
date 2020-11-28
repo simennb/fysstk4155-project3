@@ -56,7 +56,7 @@ def plot_waveform_fft(x, y, xlab, ylab, xlim, ylim, title, save, fs=14):
 
 if __name__ == '__main__':
     audio_path = '../../../Random/Kaggle/cats_dogs_audio/cats_dogs/'
-    data_path = '../datafiles/'
+    data_path = '../datafiles/dataset/'
     fig_path = '../figures/'
 
     cat = 'cat_'

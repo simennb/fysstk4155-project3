@@ -221,11 +221,20 @@ The second data set is the so-called MNIST data set \cite{MNIST}, which is a lar
 %\red{MNIST, show example plot of some of the 8x8 images with labels}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\red{PCA: Since our data set is fairly small, there is no problem fitting the entire data set into memory, meaning that we can easily use the full PCA, and not have to do stuff like minibatch PCA or random PCA, kernel PCA, check lecture notes week 43, slide 73ish}
 \section{Results and discussion} \label{chap:results}
 The code used to generate the results presented in this section can be found in the Github repository \cite{Github2}. For both data sets, we employ cross-validation when searching for the hyperparameters. The results section will be split into, the first one pertaining to the Franke function, while the second contains the analysis of the MNIST data set
 \\\\
 For simplicity, for all the neural network results we will deal with hidden layers consisting of identical amount of nodes, using the same activation functions for all layers. Strictly speaking there is nothing stopping us from having arbitrary choices of amount of nodes for the layers in the network, and some neural net structures (like for example autoencoders) rely on that. Taking this into account drastically increases the potential things to test, and is thus outside of the scope of this report.
-
+\\\\
+In project 2 \cite{Github2} we wrote our own code for grid-search, noting that it was something that would have benefited greatly from parallelization, as one of our runs took 15.5 hours to complete.
+\red{We use SKLEARNS GridSearchCV in order to test more combinations (maybe try RandomSearchCV?) as it allows for parallelizing the search, allowing us to look at a larger part of the hyperparameter space. In our case, the authors CPU\footnote{A Ryzen 5 3600X \red{maybe remove?}} has 12 threads, allowing us to potentially run 12 times as many combinations in the same amount of time.}
+\\\\
+\red{SEEMS TO PERFORM BETTER AT PREDICTING CAT SOUNDS THAN DOG WOOFS, WHICH MAY EITHER BE A RESULT OF THE LOW AMOUNT OF SAMPLES, AND THE FACT THAT THE NUMBER OF DOG SAMPLES ARE LOWER. OR POTENTIALLY THE FACT THAT THERE IS MORE VARIATION IN THE ACTUAL SOUNDS THAT DOGS MAKE, AND MAKING JUST A DIRECT FREQUENCY ANALYSIS INSUFICCIENT TO PREDICT REALLY GOOD RESULTS, AND THAT A WAVELET APPROACH COULD POTENTIALLY SOLVE THIS ISSUE.}
+\\\\
+\red{DATA SET QUALITY IS KINDA SPOTTY THOUGH, WITH SOME SAMPLES CONSISTING OF MANY DOGS, MANY CATS, OTHER NOISE, LOW VOLUME MEOWS, SYNTHETIC MEOW/BARKS}
+\\\\
+\red{COULD LOOK AT THE MISCLASSIFIED DOG SOUNDS AND SEE THEIR FOURIER SPECTRUM TO SEE IF THERE IS SOME CONSISTENCY.}
 
 \subsection{Future work} \label{sec:future}
 
