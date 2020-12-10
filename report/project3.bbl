@@ -1,26 +1,58 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
-\bibitem{Github1}
-Git{H}ub repository, {P}roject 1.
-\newblock \url{https://github.com/simennb/fysstk4155-project1}.
+\bibitem{Kaggle_catdog}
+{M}arc {M}oreaux.
+\newblock {A}udio {C}ats and {D}ogs.
+\newblock \\\url{https://www.kaggle.com/mmoreaux/audio-cats-and-dogs}.
+\newblock (accessed 20. November 2020).
 
-\bibitem{Franke}
-Richard Franke.
-\newblock A critical comparison of some methods for interpolation of scattered
-  data, 1979.
-
-\bibitem{MNIST}
-{MNIST} handwritten digit database, {Yann LeCun} {Corinna Cortes} and {Chris
-  Burges}.
-\newblock \url{http://yann.lecun.com/exdb/mnist/}.
-
-\bibitem{c2012}
-Dan Ciresan, Ueli Meier, and Juergen Schmidhuber.
-\newblock \textit{Multi-column {Deep} {Neural} {Networks} for {Image
-  Classification}}, 2012.
+\bibitem{Geron}
+Aurélien Géron.
+\newblock {\em Hands-On Machine Learning with Scikit-Learn and TensorFlow}.
+\newblock O'Reilly, first edition edition, 2017.
 
 \bibitem{Github2}
 Git{H}ub repository, {P}roject 2.
-\newblock \url{https://github.com/simennb/fysstk4155-project2}.
+\newblock \\\url{https://github.com/simennb/fysstk4155-project2}.
+
+\bibitem{MLPClassifier}
+Scikit-{L}earn: {MLPC}lassifier.
+\newblock
+  \\\url{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}.
+\newblock (accessed 10. December 2020).
+
+\bibitem{Chen_2016}
+Tianqi Chen and Carlos Guestrin.
+\newblock Xgboost.
+\newblock {\em Proceedings of the 22nd ACM SIGKDD International Conference on
+  Knowledge Discovery and Data Mining}, Aug 2016.
+
+\bibitem{roc_auc}
+Blaise Hanczar, Jianping Hua, Chao Sima, John Weinstein, Michael Bittner, and
+  Edward~R. Dougherty.
+\newblock {Small-sample precision of ROC-related estimates}.
+\newblock {\em Bioinformatics}, 26(6):822--830, 02 2010.
+
+\bibitem{Takahashi+2016}
+Naoya Takahashi, Michael Gygli, Beat Pfister, and Luc~Van Gool.
+\newblock Deep convolutional neural networks and data augmentation for acoustic
+  event recognition.
+\newblock In {\em Interspeech 2016}, pages 2982--2986, 2016.
+
+\bibitem{phan2017audio}
+Huy Phan, Philipp Koch, Fabrice Katzberg, Marco Maass, Radoslaw Mazur, and
+  Alfred Mertins.
+\newblock Audio scene classification with deep recurrent neural networks, 2017.
+
+\bibitem{Github3}
+Git{H}ub repository, {P}roject 3.
+\newblock \\\url{https://github.com/simennb/fysstk4155-project3}.
+
+\bibitem{scikit-learn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock {\em Journal of Machine Learning Research}, 12:2825--2830, 2011.
 
 \end{thebibliography}

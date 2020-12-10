@@ -1,0 +1,36 @@
+n_bins: 200 , n_pca: 35
+[Parallel(n_jobs=-1)]: Using backend LokyBackend with 12 concurrent workers.
+
+Fitting 5 folds for each of 3500 candidates, totalling 17500 fits
+[Parallel(n_jobs=-1)]: Done  26 tasks      | elapsed:    2.0s
+[Parallel(n_jobs=-1)]: Done 176 tasks      | elapsed:    8.5s
+[Parallel(n_jobs=-1)]: Done 426 tasks      | elapsed:   24.0s
+[Parallel(n_jobs=-1)]: Done 776 tasks      | elapsed:  1.0min
+[Parallel(n_jobs=-1)]: Done 1226 tasks      | elapsed:  1.6min
+[Parallel(n_jobs=-1)]: Done 1776 tasks      | elapsed:  1.8min
+[Parallel(n_jobs=-1)]: Done 4226 tasks      | elapsed:  2.2min
+[Parallel(n_jobs=-1)]: Done 5600 tasks      | elapsed:  2.8min
+[Parallel(n_jobs=-1)]: Done 7961 tasks      | elapsed:  3.3min
+[Parallel(n_jobs=-1)]: Done 9615 tasks      | elapsed:  4.6min
+[Parallel(n_jobs=-1)]: Done 10665 tasks      | elapsed:  5.4min
+[Parallel(n_jobs=-1)]: Done 12921 tasks      | elapsed:  6.0min
+[Parallel(n_jobs=-1)]: Done 14428 tasks      | elapsed:  7.0min
+[Parallel(n_jobs=-1)]: Done 16665 tasks      | elapsed:  7.8min
+[Parallel(n_jobs=-1)]: Done 17477 out of 17500 | elapsed:  8.0min remaining:    0.5s
+[Parallel(n_jobs=-1)]: Done 17500 out of 17500 | elapsed:  8.0min finished
+Total time elapsed: 479.12 s
+{'activation': 'logistic', 'alpha': 0.1, 'learning_rate_init': 0.01, 'max_iter': 400, 'n_hidden_layers': 1, 'n_hidden_neurons': 5}
+Mean fit time = 3.25e-01 s
+### GRID SEARCH RESULTS ###
+Best params:
+{'activation': 'logistic',
+ 'alpha': 0.1,
+ 'learning_rate_init': 0.01,
+ 'max_iter': 400,
+ 'n_hidden_layers': 1,
+ 'n_hidden_neurons': 5}
+Test accuracy = 0.906
+
+### NORMAL DATA TRAIN TEST SPLIT ###
+Train accuracy = 0.914
+Test accuracy = 0.893

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.decomposition import PCA
 
-data_path = '../datafiles/dataset/'
+data_path = '../datafiles/dataset/'  # bootstrap/'
 
 n_bins = 200
 
@@ -22,5 +22,5 @@ print(X_reduced.shape)
 
 # TODO: maybe consider plotting stuff?
 
-X = np.save(data_path + 'pca/cat_dog_X_nbins%d_pca%d.npy' % (n_bins, X_reduced.shape[1]), X_reduced)
+X = np.save(data_path + 'cat_dog_X_nbins%d_pca%d.npy' % (n_bins, X_reduced.shape[1]), X_reduced)
 

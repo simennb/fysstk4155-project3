@@ -1,0 +1,26 @@
+n_bins: 200 , n_pca: 35
+
+[Parallel(n_jobs=-1)]: Using backend LokyBackend with 12 concurrent workers.
+Fitting 5 folds for each of 4800 candidates, totalling 24000 fits
+[Parallel(n_jobs=-1)]: Done  26 tasks      | elapsed:    1.8s
+[Parallel(n_jobs=-1)]: Done 2533 tasks      | elapsed:    8.6s
+[Parallel(n_jobs=-1)]: Done 7153 tasks      | elapsed:   21.1s
+[Parallel(n_jobs=-1)]: Done 12053 tasks      | elapsed:   34.8s
+[Parallel(n_jobs=-1)]: Done 18353 tasks      | elapsed:   52.4s
+[Parallel(n_jobs=-1)]: Done 24000 out of 24000 | elapsed:  1.2min finished
+Total time elapsed: 69.55 s
+Mean fit time = 2.83e-02 s
+### GRID SEARCH RESULTS ###
+Best params:
+{'max_depth': 3,
+ 'max_features': 13,
+ 'min_samples_leaf': 8,
+ 'min_samples_split': 2,
+ 'n_estimators': 25}
+
+Train accuracy = 0.972
+Test accuracy = 0.910
+
+### NORMAL DATA TRAIN TEST SPLIT ###
+Train accuracy = 0.910
+Test accuracy = 0.893

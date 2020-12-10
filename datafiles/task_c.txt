@@ -1,0 +1,4 @@
+n_bins: 200 , n_pca: 0
+[Parallel(n_jobs=-1)]: Using backend LokyBackend with 12 concurrent workers.
+
+Fitting 5 folds for each of 3920 candidates, totalling 19600 fits

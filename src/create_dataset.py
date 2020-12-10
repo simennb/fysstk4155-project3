@@ -71,12 +71,12 @@ if __name__ == '__main__':
     plot_dog = 6
 
     sr = 16000
-    bin_size = 20
+    bin_size = 40
     n_bins = (sr//2) // bin_size
 
     data_set = np.zeros((n_tot, n_bins))
     y_targets = np.zeros((n_tot, 1))
-    y_targets[167:] = 1  # 0 = cat, 1 = dog
+    y_targets[n_cat:] = 1  # 0 = cat, 1 = dog
 
     # Looping over all cat audio files
     for i in range(1, n_cat + 1):
@@ -105,6 +105,19 @@ if __name__ == '__main__':
                               ['Time [s]', 'Frequency [Hz]'], ['Amplitude', 'Amplitude'],
                               [time[0], time[-1]], [freq_binned[0], freq_binned[-1]], 'Dog sample nr. %d' % i,
                               fig_path + 'dog_%d_nbins%d.png' % (i, n_bins))
+
+    # Potentially bootstrapping the dataset to have identical amount of cat and dog samples
+    boot = True
+    if boot:
+        data_path += 'bootstrap/'
+        n_tot = 2 * n_cat
+        y_targets = np.zeros((n_tot, 1))
+        y_targets[n_cat:] = 1  # 0 = cat, 1 = dog
+
+        sample_ind = np.random.randint(n_cat, len(data_set), n_cat - n_dog)
+        new_samples = np.zeros((len(sample_ind), n_bins))
+        new_samples[:] = data_set[sample_ind, :]
+        data_set = np.concatenate((data_set, new_samples), axis=0)
 
     # Shuffle design matrix and targets
     shuffle = np.arange(len(y_targets))
