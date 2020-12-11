@@ -160,7 +160,9 @@ In this project, we want to take a look at audio classification using different 
 %We find that \red{insert results}
 %\red{Better at cats, worse at dogs}
 % SPECIEST!!!
-We find that all three methods classify the samples with an accuracy of over 90\%, with XGBoost performing the best \red{at 95\%}. For all methods there is a slightly lower accuracy rate for classifying dog samples compared to cats, possibly stemming from the larger variance in spectral characteristics between small and large dogs. \red{PCA}
+We find that neural nets and random forest classify the samples with an accuracy of around 90\% for both the normal data set and the reduced data set, with a slight reduction in the PCA reduced results. XGBoost performs the best with almost 95\% accuracy on the full data set, and 93\% on the reduced. Further, we find that the neural net is better at classifying dogs than cats, while random forests and XGBoost classifies cats better.
+
+%We find that all three methods classify the samples with an accuracy of over 90\%, with XGBoost performing the best \red{at 95\%}. For all methods there is a slightly lower accuracy rate for classifying dog samples compared to cats, possibly stemming from the larger variance in spectral characteristics between small and large dogs. \red{PCA}
 %In this project, we want to study a few methods commonly used in data science for both normal regression problems, as well as classification problems. The methods we will be employing are the stochastic gradient descent (SGD) and feed-forward neural networks (FFNN). For regression, we will be looking at is the Franke function studied in the previous project \cite{Github1}, comparing our results to the ones found there. For classification the MNIST database of handwritten digits will be studied. Cross-validation will be used for the hyperparameter search for both problems in order to make sure the model is the optimal one.
 
 \end{abstract}
@@ -348,9 +350,9 @@ The data set we will be using in this project is a data set consisting of 277 au
 Given the sound files, we need to define how the data will be represented when fed into our classification methods. When it comes to sound files, there are three main approaches one could take, working in either the time domain, the frequency domain, or even wavelet domain. Depending on the specific methods used for the analysis, different approaches may be more optimal. For example, using recurrent neural networks \cite{phan2017audio}.
 In wavelet space one could for example use a convolutional neural network to classify based on the spectrogram images. In \cite{Takahashi+2016} convolutional neural networks was used on a larger audio data set (of which our data set is two of the different classes of audio events studied), achieving roughly 93\% accuracy.
 \\\\
-However, in order to keep this report as a simple demonstration, we will restrict ourselves to the frequency space, making a simple data matrix with the frequencies as our predictors. Since the nearby frequencies are highly correlated, we bin the frequencies, reducing the size of the data set. The Fourier transform of each of the files are computed, and the the frequencies are binned into 200 bins of size 40 Hz\footnote{The number of bins and bin size here is chosen somewhat arbitrarily.}
+However, in order to keep this report as a simple demonstration, we will restrict ourselves to the frequency space, making a simple data matrix with the frequencies as our predictors. Since the nearby frequencies are highly correlated, we bin the frequencies, reducing the size of the data set. The Fourier transform of each of the files are computed, and the the frequencies are binned into 200 bins of size 40 Hz\footnote{The number of bins and bin size here is chosen somewhat arbitrarily.}.
 \\\\
-Figure \ref{fig:cat_dog_samples} shows the time and frequency signal for one of the cat and one of the dog samples. We see that for at least this dog sample, the dominating frequencies are a lot lower than for the cat, which is the kind of difference we hope our methods will be able to detect.
+Figure \ref{fig:cat_dog_samples} shows the time and frequency signal for one of the cat and one of the dog samples. We see that for at least this dog sample, the dominating frequencies are a lot lower than for the cat, which is the kind of difference we hope our methods will be able to detect. One potential complication here is the frequency differences between dogs of different sizes, as the pitch between them could potentially make it harder to accurately predict dogs, especially when there are less of them sample wise.
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}{0.49\textwidth}
@@ -371,15 +373,15 @@ As the data set is fairly small, there is no problem using the full PCA, and we 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Results and discussion} \label{chap:results}
-\red{1. only best params, confusion matrix (+ roc/auc) in results. \\2. heatmaps and parameter combinations in appendices}
-\\\\
+%\red{1. only best params, confusion matrix (+ roc/auc) in results. \\2. heatmaps and parameter combinations in appendices}
+%\\\\
 In this section we will go through the results from analyzing the data set described in Chapter \ref{chap:data_sets}, using different classification methods and dimensionality reduction. The code used to generate the results can be found in the GitHub repository \cite{Github3}, and is implemented using Scikit-Learn \cite{scikit-learn} in order to be able to parallelize the hyperparameter search\footnote{In the previous project \cite{Github2}, one of the grid searches took over 15 hours. Even though this data set is smaller, allowing the code to use more cores/threads (in the authors case, 12 threads) should reduce the run time significantly, allowing us to evaluate a larger part of the hyperparameter space.}. Cross-validation is employed during the hyperparameter search in order to more properly evaluate the results.
 %\\\\
 %\red{USE GRADIENT BOOSTING METHODS POTENTIALLY TO PENALIZE MISCLASSIFICATIONS MORE.}
 \subsection{Neural networks}
-We find our optimal hyperparameters for the neural net by performing grid search using the hyperparameter sets found in appendix \ref{app:nn_heatmaps}. For simplicity, we set use a constant learning rate, and set all hidden layers to have the same amount of nodes, however a more proper analysis would be useful.
+We find our optimal hyperparameters for the neural net by performing grid search using the hyperparameter sets found in appendix \ref{app:nn_heatmaps}. For simplicity we set all hidden layers to have the same amount of nodes, however a more proper analysis would be useful. When trying the different solvers discussed earlier, it proved difficult to find any parameters where the stochastic gradient descent managed to converge properly. This was however not a problem with the quasi-Newton solver, so all the results presented here uses the \texttt{lbfgs} solver.
 \subsubsection{Full data set}
-Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the neural net. Some of the hyperparameter heatmaps can be found in appendix \ref{app:nn_heatmaps}, figure \ref{fig:app_nn_nonpca}. We note that \red{yes}
+Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the neural net. Some of the hyperparameter heatmaps can be found in appendix \ref{app:nn_heatmaps}, figure \ref{fig:app_nn_nonpca}. We note that the logistic function gives the best results, with tanh being the second best. In the previous project \cite{Github2}, we found that the ReLU activation performed the best for regression, and the worst for classification. Very curious is the fact that the best model is one with only one hidden layer, containing only one neuron. Looking at panel (d) in figure \ref{fig:app_nn_nonpca} we see how the results change depending on the depth and width of the neural network.
 \begin{table}[H]
   \centering
   \caption{Best-fit hyperparameters for feed-forward neural network. Full data set.}
@@ -387,22 +389,22 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
   \begin{tabular}{c|c}
     \hline\hline
     Parameter & Value\\\hline
-    n hidden neurons &  $5$\\
-    n hidden layers &  $100$\\
+    n hidden neurons &  $1$\\
+    n hidden layers &  $1$\\
     activation & logistic \\
-    $\lambda$/$\alpha$  & $0.0$\\
-    learning rate & $0.01$ \\
-    max iterations & $500$
+    $\lambda$/$\alpha$  & $0.0001$\\
+%    learning rate & $0.01$ \\
+    max iterations & $600$
     \end{tabular}
 \end{table}
-
+Figure \ref{fig:nn_confusion_nonpca} shows the confusion matrix for the best-fit neural net, showing that the model performs quite a bit better at classifying the dog samples (96\%) compared to the cat samples (88\%). This gives us a total accuracy of $0.911$, which is still good.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{../figures/neural_net/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{Confusion matrix for the neural net, full data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:nn_confusion_nonpca}
 \end{figure}	
-
+Figure \ref{fig:nn_roc_nonpca} shows the ROC curve for the best-fit neural net. We see that both of the class curves are good, with the same AUC score.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{../figures/neural_net/roc_nbins200_pca0_seed4155_ts0.20.png}
@@ -410,9 +412,8 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 	\label{fig:nn_roc_nonpca}
 \end{figure}	
 
-
 \subsubsection{PCA reduced data set}
-
+For the PCA reduced data set, we run with the same hyperparameter sets as earlier, and get the following best-fit parameters, as shown in table \ref{tab:best_fit_nn_pca}. Some of the hyperparameter heatmaps can be seen in figure \ref{fig:app_nn_pca}. This time, a larger regularization strength is chosen, and we see that the best model contains a few more hidden neurons.
 \begin{table}[H]
   \centering
   \caption{Best-fit hyperparameters for feed-forward neural network. PCA reduced data set.}
@@ -421,22 +422,21 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
     \hline\hline
     Parameter & Value\\\hline
     n hidden neurons &  $5$\\
-    n hidden layers &  $100$\\
+    n hidden layers &  $1$\\
     activation & logistic \\
-    $\lambda$/$\alpha$  & $0.0$\\
-    learning rate & $0.01$ \\
-    max iterations & $500$
+    $\lambda$/$\alpha$  & $0.1$\\
+%    learning rate & $0.01$ \\
+    max iterations & $400$
     \end{tabular}
 \end{table}
-
-
+Training our neural net with the best-fit parameters we get the following confusion matrix for the PCA reduced data set, shown in figure \ref{fig:nn_confusion_pca}. Here, we see that the true positives remain the same (maybe slight improvement as blue color is a bit darker), while the model loses 4\% at classifying dogs. This could be due to the larger probable variation in frequencies used by dogs of different sizes, and thus when reducing the dimensions, the information lost affects dogs more. The disparity in sample sizes for both classes could also affect this to some extent.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{../figures/neural_net/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{Confusion matrix for the neural net, PCA reduced data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:nn_confusion_pca}
 \end{figure}	
-
+Figure \ref{fig:nn_roc_pca} shows the ROC curves for the best-fit neural net. Similar to the full data set, it is hard to tell anything beyond that the models seem to perform well. The AUC is slightly higher than before though, despite the total accuracy for the model decreasing slightly.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{../figures/neural_net/roc_nbins200_pca35_seed4155_ts0.20.png}
@@ -445,7 +445,9 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 \end{figure}	
 
 \subsection{Random forests}
+We find our optimal hyperparameters for random forests by performing grid search using the hyperparameter sets found in appendix \ref{app:rf_heatmaps}.
 \subsubsection{Full data set}
+Table \ref{tab:best_fit_rf_nonpca} shows our best-fit hyperparameters for random forests. Some of the hyperparameter heatmaps can be found in appendix \ref{app:rf_heatmaps}, figure \ref{fig:app_rf_nonpca}.
 \begin{table}[H]
   \centering
   \caption{Best-fit hyperparameters for random forests. Full data set.}
@@ -453,22 +455,22 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
   \begin{tabular}{c|c}
     \hline\hline
     Parameter & Value\\\hline
-    n estimators &  $5$\\
-    max depth &  $100$\\
-    min samples split & $1$ \\
-    min samples leaf  & $0.0$\\
-    max features & 10 \\
-    max leaf nodes & $0.1$
+    n estimators &  $15$\\
+    max depth &  $7$\\
+    min samples split & $2$ \\
+    min samples leaf  & $5$\\
+    max features & $7$ %\\
+%    max leaf nodes & $0.1$
     \end{tabular}
 \end{table}
-
+Figure \ref{fig:rf_confusion_nonpca} shows the confusion matrix for the best-fit random forest. Here, the results are almost inverse of what was found for the neural net. The random forest performs extremely well at classifying cat samples, at 97\% accuracy, while dogs end up with only 83\%. This cat accuracy comes at the cost of dogs, leading our model to guess dogs more often, as seen in the false negatives.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{../figures/random_forest/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{Confusion matrix for random forests, full data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:rf_confusion_nonpca}
 \end{figure}	
-
+Figure \ref{fig:rf_roc_nonpca} shows the ROC curve for the random forest. The AUC is the same for both classes, so either something is wrong with our implementation, or it really is as mentioned earlier quite problematic for evaluating model fit.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{../figures/random_forest/roc_nbins200_pca0_seed4155_ts0.20.png}
@@ -477,6 +479,7 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 \end{figure}	
 
 \subsubsection{PCA reduced data set}
+Table \ref{tab:best_fit_rf_pca} shows our best-fit hyperparameters for the PCA reduced data set. Some of the hyperparameter heatmaps can be found in appendix \ref{app:rf_heatmaps}, figure \ref{fig:app_rf_pca}. We note that compared to the full data set, there is a higher amount of trees made. The trees are less deep (max depth 3 vs 7), however a higher amount of features is considered for each tree, which along with the fact that there are less features in total, means that $37$\% of all dimensions are considered for each tree, compared to $3.5$\% for the full set.
 
 \begin{table}[H]
   \centering
@@ -485,22 +488,22 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
   \begin{tabular}{c|c}
     \hline\hline
     Parameter & Value\\\hline
-    n estimators &  $5$\\
-    max depth &  $100$\\
-    min samples split & $1$ \\
-    min samples leaf  & $0.0$\\
-    max features & 10 \\
-    max leaf nodes & $0.1$
+    n estimators &  $25$\\
+    max depth &  $3$\\
+    min samples split & $2$ \\
+    min samples leaf  & $8$\\
+    max features & $13$ %\\
+%    max leaf nodes & $0.1$
     \end{tabular}
 \end{table}
-
+Figure \ref{fig:rf_confusion_pca} shows the confusion matrix for the random forest with the PCA reduced data set. We see that the predictive power drops for the cat class, however the dog accuracy increases. Similar to the full data set, the results are the opposite of the equivalent neural net result, with the random forest being better at classifying the cat samples rather than dogs.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{../figures/random_forest/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{Confusion matrix for random forests, PCA reduced data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:rf_confusion_pca}
 \end{figure}	
-
+Figure \ref{fig:rf_roc_pca} shows the ROC curves for the PCA reduced data set. Here, the curves for both classes are very close to each other, which kinda makes sense given the similar accuracy seen in the confusion matrix. The AUC however is higher than it was for the full data set.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{../figures/random_forest/roc_nbins200_pca35_seed4155_ts0.20.png}
@@ -510,7 +513,10 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 
 
 \subsection{XGBoost}
+Finally, we move on to XGBoost, and find our optimal hyperparameters by performing grid search using the hyperparameter sets found in appendix \ref{app:xgboost_heatmaps}.
+
 \subsubsection{Full data set}
+Table \ref{tab:best_fit_xgboost_nonpca} shows our best-fit hyperparameters for XGBoost. Some of the hyperparameter heatmaps can be found in appendix \ref{app:xgboost_heatmaps}, figure \ref{fig:app_xgboost_nonpca}. We see that no regularization is preferred. Testing a larger set of learning rates might have been useful.
 \begin{table}[H]
   \centering
   \caption{Best-fit hyperparameters for XGBoost. Full data set.}
@@ -518,21 +524,21 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
   \begin{tabular}{c|c}
     \hline\hline
     Parameter & Value\\\hline
-    learning rate  & $0.0$\\
-    n estimators &  $5$\\
-    max depth &  $100$\\
-    min child weight & $1$ \\
-    lambda & 10
+    learning rate  & $0.2$\\
+    n estimators &  $100$\\
+    max depth &  $4$\\
+    min child weight & $7$ \\
+    lambda & $0.0$
     \end{tabular}
 \end{table}
-
+From the best-fit hyperparameters, we get the following confusion matrix for XGBoost, shown in figure \ref{fig:xgboost_confusion_nonpca}. We see that XGBoost performs extremely well for both classes, with a ~95\% accuracy for both classes combined. Like with random forests, XGBoost performs better at classifying cat samples.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{../figures/xgboost/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{Confusion matrix for XGBoost, full data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:xgboost_confusion_nonpca}
 \end{figure}
-
+Figure \ref{fig:xgboost_roc_nonpca} shows the ROC curves and AUC score for XGBoost. Like previously, it is hard to gauge anything useful from the plot, beyond it performing well.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{../figures/xgboost/roc_nbins200_pca0_seed4155_ts0.20.png}
@@ -541,6 +547,7 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 \end{figure}	
 
 \subsubsection{PCA reduced data set}
+Table \ref{tab:best_fit_xgboost_pca} shows our best-fit hyperparameters for XGBoost with the PCA reduced data set. Some of the hyperparameter heatmaps can be found in appendix \ref{app:xgboost_heatmaps}, figure \ref{fig:app_xgboost_pca}. We note that a smaller set of shallower trees is preferred, with the amount of estimators almost matching the reduction in dimensionality.
 
 \begin{table}[H]
   \centering
@@ -549,14 +556,14 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
   \begin{tabular}{c|c}
     \hline\hline
     Parameter & Value\\\hline
-    learning rate  & $0.0$\\
-    n estimators &  $5$\\
-    max depth &  $100$\\
+    learning rate  & $0.3$\\
+    n estimators &  $20$\\
+    max depth &  $2$\\
     min child weight & $1$ \\
-    lambda & 10
+    lambda & $0.0$
     \end{tabular}
 \end{table}
-
+Figure \ref{fig:xgboost_confusion_pca} shows the confusion matrix with XGBoost on the PCA reduced data set. The correctly guessed cat samples decreases by 3 percentage points, while the dog accuracy remains unchanged. The total accuracy drops slightly, but it still outperforms the neural net and random forests.
 
 \begin{figure}[H]
 	\centering
@@ -564,6 +571,7 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 	\caption{Confusion matrix for XGBoost, PCA reduced data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:xgboost_confusion_pca}
 \end{figure}	
+Figure \ref{fig:xgboost_roc_pca} shows the ROC curves and AUC score for the PCA reduced data set. Like with neural net and random forests, the ROC curves and AUC scores seem to be better for the dimensionality reduced data set, despite the model accuracy being lower in all cases.
 
 \begin{figure}[H]
 	\centering
@@ -572,60 +580,64 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 	\label{fig:xgboost_roc_pca}
 \end{figure}	
 
-
-\red{SEEMS TO PERFORM BETTER AT PREDICTING CAT SOUNDS THAN DOG WOOFS, WHICH MAY EITHER BE A RESULT OF THE LOW AMOUNT OF SAMPLES, AND THE FACT THAT THE NUMBER OF DOG SAMPLES ARE LOWER. OR POTENTIALLY THE FACT THAT THERE IS MORE VARIATION IN THE ACTUAL SOUNDS THAT DOGS MAKE, AND MAKING JUST A DIRECT FREQUENCY ANALYSIS INSUFICCIENT TO PREDICT REALLY GOOD RESULTS, AND THAT A WAVELET APPROACH COULD POTENTIALLY SOLVE THIS ISSUE.}
-\\\\
-\red{DATA SET QUALITY IS KINDA SPOTTY THOUGH, WITH SOME SAMPLES CONSISTING OF MANY DOGS, MANY CATS, OTHER NOISE, LOW VOLUME MEOWS, SYNTHETIC MEOW/BARKS}
-\\\\
-\red{COULD LOOK AT THE MISCLASSIFIED DOG SOUNDS AND SEE THEIR FOURIER SPECTRUM TO SEE IF THERE IS SOME CONSISTENCY.}
 \subsection{Time}
-Table \ref{tab:timing} shows the average time the training/fit process took for each of the three classification methods, for both versions of the data set. \red{LBFGS is fast, SGD is not, took ~420 ms on average.} 
+Table \ref{tab:timing} shows the average time the training/fit process took for each of the three classification methods, for both versions of the data set. We see that for the full data set, random forest is the fastest method, being roughly 3 times as fast for training compared to XGBoost. Since we used the parameter setting for number of decision trees for both of them, that is not the reason for the discrepancy either. The neural net on the other hand was extremely slow.
+\\\\
+When using the PCA reduced data set both the neural net and XGBoost decreased their run time by a decent amount. This data set has roughly 1/6th as many dimensions as the full one, with neural net speeding up by 2.25 times, and XGBoost at 4.03 times faster, so the run times don't scale linearly with predictor size. Curiously enough, the random forest training time does not change.
+
+%\red{LBFGS is fast, SGD is not, took ~420 ms on average.} 
 \begin{table}[H]
   \centering
-  \caption{Average fit/training time for the three different methods examined, given in milliseconds. (lbfgs solver for NN)}
+  \caption{Average fit/training time for the three different methods examined, given in milliseconds.}
   \label{tab:timing}
   \begin{tabular}{c|c|c}
     \hline\hline
     Method & Time without PCA [$ms$] & Time with PCA [$ms$] \\\hline
 %    Neural net (adam) & 235.0 & 177.0 \\
-    Neural net (lbfgs) & 69.8 & 32.6 \\
-    Random forest & 28.5 & 29.0 \\
-    XGBoost & 91.6 & 21.8
+    Neural net & $732$ & $325$ \\
+    Random forest & $28.4$ & $28.3$ \\
+    XGBoost & $83.9$ & $20.8$
     \end{tabular}
 \end{table}
+As the parameter grid search has been run in parallel on all CPU threads, this test does end up somewhat depending on computer load, and while we attempted to limit other things running at the same time, its hard to say exactly how accurate they are, beyond the fact that neural nets were significantly slower.
 
 \subsection{Summary of results}
-The results are summarized in table \ref{tab:summary}, showing the total accuracy and the ROC AUC for each of the three methods.
+The results are summarized in table \ref{tab:summary}, showing the total accuracy and the ROC AUC for each of the three methods. We see that neural nets and random forests perform the same when looking at the accuracy, however there is a small improvement with the AUC when using the PCA reduced data set. Given the runtime differences between FFNN and RF mentioned earlier, and the convergence issues, random forest is the best option of the two. XGBoost performs better than both of them however, performing at over 90\% for both data set versions.
 \begin{table}[H]
   \centering
-  \caption{Summary of the accuracy and AUC scores for each of the classification methods.}
+  \caption{Summary of the accuracy and AUC scores for each of the classification methods. The AUC score corresponds to the micro-average found in the ROC plots. The micro-average is used as there is a class imbalance due to there being more cat samples than dogs.}
   \label{tab:summary}
   \begin{tabular}{c|c|c||c|c}
     \hline\hline
     Method & Accuracy & ROC AUC & Accuracy (PCA) & ROC AUC (PCA) \\\hline
-    Neural net & $0.10$ & $0.10$ & $0.10$ & $0.10$ \\
-    Random forest & $0.10$ & $0.10$ & $0.10$ & $0.10$ \\
-    XGBoost & $0.10$ & $0.10$ & $0.10$ & $0.10$
+    Neural net & $0.911$ & $0.92$ & $0.893$ & $0.95$ \\
+    Random forest & $0.911$ & $0.95$ & $0.893$ & $0.97$ \\
+    XGBoost & $0.946$ & $0.97$ & $0.929$ & $0.97$
     \end{tabular}
 \end{table}
-
-\red{Table of the ROC AUC or gain AUC for both methods (and both data set variations)}
-\\\\
-\red{Issues with data set. At one point, the data set analyzed was messed up and contained 3 dog samples with the label cat. Causing the predictive power for classifying dogs to be much lower than the results here.}
-\subsection{Future work} \label{sec:future}
-\red{more preprocessing of audio, like noise reduction methods}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion} \label{chap:conclusion}
 In this project, we set out to investigate how a frequency-space approach to classifying different animal sounds performs when using feed-forward neural nets, random forests, and the gradient boosting method XGBoost. The data set was a set of audio files containing cat and dog sounds, that were transformed into frequency space using Fourier transform, and then binned into 40 Hz bins. We also tested PCA to see if further reducing the amount of dimensions yielded improvements to either accuracy or run time.
+\\\\
+%\red{results}
+For the full data set we find that both the feed-forward neural net and the random forest performs exactly the same, with an accuracy of 91\%. Random forest has a slightly better AUC score, however all ROC/AUC results seem odd. XGBoost performs even better than both of them with an accuracy of almost 95\%.
+\\\\
+For the PCA reduced data set, very similar differences were found, with everything shifted downwards accuracy wise. Neural nets and random forests got an accuracy score of 89\%, while XGBoost also here performed the best with an accuracy of 93\%.
+\\\\
+For both data sets, FFNN classified dogs better than cats, while RF and XGBoost classified cats more accurately than dogs. The difference between the classes decreased however with the PCA reduced data set for all methods. Time wise, FFNN was by far the slowest, while RF was faster than XGBoost for the full data set. For the reduced data set, XGBoost was the fastest, while RF remained unchanged.
 %In this project, we set out to investigate how stochastic gradient descent and feed-forward neural networks work on both regression and classification problems. We used cross-validation in order to assess which of the hyperparameter combinations gave the best fit.
 %\\\\
 %For the Franke function, we found that both SGD and FFNN performed worse than OLS and Ridge, though the neural net got much closer, with an $R^2$ score of $0.93$, while SGD got $0.84$, none of which are bad. For both, we found that the largest number of epochs $\Nepochs = 100$ and the largest learning rate $\eta=0.1$ gave the best results. SGD preferred a batch size of 5, with no regularization for $p=8$, and $\lambda=0.001$ at $p=15$, showing similar behavior with how OLS and Ridge performed for those polynomial degrees. The neural net yielded much better results as the batch size is increased. Based on tests, it seems that using either one of the ReLu family activation functions would have improved the results.
 %\\\\
 %For the classification case, where we studied a reduced version of the MNIST data set, both the SGD and Neural net performed exceedingly well, outperforming the equivalent Scikit-Learn implementation. The SGD implementation gave an accuracy of 96\%, which starts to approach what you would expect from human accuracy. SKL was within a percent point away from it. The NN code yielded an accuracy of 95\%, but doing so with only 10 epochs and 10 nodes in the singular hidden layer. 
-\red{Future, look at data with more classes, like the original set.}
-\red{FUTURE, LOOK AT RANDOM SEARCH FOR PARAMETERS INSTEAD OF grid saercarh}
+\\\\
+For future work it would have been interesting to create an ensemble method consisting of neural nets and either of the other methods, as the former was better at classifying dogs, while random forests and XGBoost performed better when classifying cats, so this might lead us to an even better performing classifier. A closer look at the frequency spectra for the misclassified samples might have yielded some insight into the classification differences. It might also be beneficial to use something else than grid search in order to find better hyperparameters. Finally, it would be interesting to see how well our method performs on the full data set that \cite{Takahashi+2016} used, as it contained more classes than just the two used here.
+%In hindsight, it might also be a good idea to let the model predict the probability that it is either a cat or a dog, making the output a one-hot vector instead of coding cat=0 and dog=1 as our targets.
+%\red{Future, look at data with more classes, like the original set.}
+%\red{FUTURE, LOOK AT RANDOM SEARCH FOR PARAMETERS INSTEAD OF grid saercarh}
+%\red{Future, maybe combine results into an ensemble method as NN appeared to be better at classifying dogs, so this might give even better results. Both RF and XGBoost are better at classifying cats than dogs.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliography{references}
@@ -639,12 +651,13 @@ In this project, we set out to investigate how a frequency-space approach to cla
 \section{Neural Net Heatmaps} \label{app:nn_heatmaps}
 The following hyperparameter sets were used for finding best fit parameters as well as heatmaps below.
 \begin{align*}
-	N_{\text{epochs}} &\in \{10, 25, 50, 100\}\\
-	\text{batch size} &\in \{1, 5, 10, 50\}\\
-	\eta_0 &\in \{0.1, 0.01, 0.001\}\\
-	\lambda &\in \{0.0, 0.1, 0.01, 0.001\}\\
-	\Nhn &\in \{10, 25, 50\}\\
-	\Nhl &\in \{1, 2, 3, 4\}
+	\text{n hidden neurons} &\in \{1, 5, 10, 25, 50, 75, 100\}\\
+	\text{n hidden layers} &\in \{1, 2, 3, 4, 5\}\\
+	\text{max iterations} &\in \{200, 300, 400, 500, 600\}\\
+	\text{activation} &\in \{\text{relu}, \text{logistic}, \text{tanh}, \text{identity}\}\\
+	\text{lambda} &\in \{0.1, 0.01, 0.001, 0.0001, 0.0\}
+%	\text{batch size} &\in \{1, 5, 10, 50\}\\
+%	\eta_0 &\in \{0.1, 0.01, 0.001\}\\
 \end{align*}
 
 \subsection{Without PCA}
@@ -701,12 +714,11 @@ The following hyperparameter sets were used for finding best fit parameters as w
 \section{Random Forests Heatmaps} \label{app:rf_heatmaps}
 The following hyperparameter sets were used for finding best fit parameters as well as heatmaps below.
 \begin{align*}
-	\text{max depth} &\in \{10, 25, 50, 100\}\\
-	\text{max features} &\in \{1, 5, 10, 50\}\\
-	\text{min samples leaf} &\in \{0.1, 0.01, 0.001\}\\
-	\text{min samples split} &\in \{0.0, 0.1, 0.01, 0.001\}\\
-	N_{\text{estimators}} &\in \{10, 25, 50\}\\
-	\text{max leaf nodes} &\in \{1, 2, 3, 4\}
+	\text{max depth} &\in \{3, 5, 7, 9, 12\}\\
+	\text{max features} &\in \{3, 5, 7, 10, 13\}\\
+	\text{min samples leaf} &\in \{5, 8, 10, 12\}\\
+	\text{min samples split} &\in \{2, 3, 4, 5, 7, 9\}\\
+	\text{n estimators} &\in \{2, 5, 7, 10, 15, 25, 50, 100\}
 \end{align*}
 
 \subsection{Without PCA}
@@ -763,12 +775,11 @@ The following hyperparameter sets were used for finding best fit parameters as w
 \section{XGBoost Heatmaps} \label{app:xgboost_heatmaps}
 The following hyperparameter sets were used for finding best fit parameters as well as heatmaps below.
 \begin{align*}
-	N_{\text{epochs}} &\in \{10, 25, 50, 100\}\\
-	\text{batch size} &\in \{1, 5, 10, 50\}\\
-	\eta_0 &\in \{0.1, 0.01, 0.001\}\\
-	\lambda &\in \{0.0, 0.1, 0.01, 0.001\}\\
-	\Nhn &\in \{10, 25, 50\}\\
-	\Nhl &\in \{1, 2, 3, 4\}
+	\text{learning rate} &\in \{0.05, 0.1, 0.2, 0.3\}\\
+	\text{n estimators} &\in \{5, 10, 15, 20, 25, 50, 100\}\\
+	\text{max depth} &\in \{2, 3, 4, 5, 6, 7, 8\}\\
+	\text{min child weight} &\in \{1, 3, 5, 7, 10\}\\
+	\text{lambda} &\in \{0.0, 0.1, 0.01, 0.001\}
 \end{align*}
 
 \subsection{Without PCA}
