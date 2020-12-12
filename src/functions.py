@@ -3,9 +3,6 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
-###########################################################
-############# Plotting and printing functions #############
-###########################################################
 
 def plot_heatmap(x, y, z, xlab, ylab, zlab, title, save, fig_path, task=None, fs=14, xt='int', yt='int'):
     ticks = {'int': '%d', 'exp': '%1.1e', 'str': '%s'}  # formatting x/y-ticks

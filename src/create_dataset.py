@@ -1,7 +1,6 @@
 import numpy as np
 import librosa
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 def load_audio(filename):
@@ -25,12 +24,6 @@ def compute_fft(audio_data, sr, n_bins):
         freq_binned[b] = np.mean(freq[b*bs: (b+1)*bs])
 
     fft_binned /= np.max(fft_binned)
-#    print(fourier.shape, freq_binned.shape, fft_binned.shape)
-
-#    plt.plot(freq, fourier/np.max(fourier))
-#    plt.plot(freq_binned, fft_binned/np.max(fft_binned))
-#    plt.xlim([0, sr / 2])
-#    plt.show()
 
     return freq_binned, fft_binned
 
@@ -55,7 +48,7 @@ def plot_waveform_fft(x, y, xlab, ylab, xlim, ylim, title, save, fs=14):
 
 
 if __name__ == '__main__':
-    audio_path = '../../../Random/Kaggle/cats_dogs_audio/cats_dogs/'
+    audio_path = '../../../Random/Kaggle/cats_dogs_audio/cats_dogs/'  # path to data set, needs to be changed
     data_path = '../datafiles/dataset/'
     fig_path = '../figures/'
 

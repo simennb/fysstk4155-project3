@@ -14,12 +14,11 @@ from neural_net import NeuralNet
 ########################
 ###### PARAMETERS ######
 ########################
-parallel = -1
+parallel = -1  # number of jobs to run, -1 = all
 
 data_path = '../datafiles/'
 fig_path = '../figures/neural_net/'
 pickle = data_path + 'neural_net/'
-# TODO: Fix pickle with n_bins and folder creation!
 
 if not os.path.exists(fig_path):
     os.mkdir(fig_path)
@@ -28,33 +27,29 @@ if not os.path.exists(pickle):
 
 test_size = 0.2
 n_bins = 200
-n_pca = 0#35
+n_pca = 35  # 0 for full data set
 
 load_data = False
 #load_data = True
 
 # Create the parameter grid based on the results of random search
-# TODO: Find and decide on parameter sets to use
 param_grid = {
     'n_hidden_neurons': [1, 5, 10, 25, 50, 75, 100],
     'n_hidden_layers': [1, 2, 3, 4, 5],
     'activation': ['relu', 'logistic', 'tanh', 'identity'],
     'alpha': [0.1, 0.01, 0.001, 0.0001, 0.0],
-    'learning_rate_init': [0.01],  # THIS HOWEVER ONLY USED FOR SGD
-    'max_iter': [200, 300, 400, 500, 600]  # YES IT IS USED
+    'learning_rate_init': [0.01],  # only used for SGD, but easier to keep here
+    'max_iter': [200, 300, 400, 500, 600]
 }
 
 # Other parameters MLPClassifier beyond the ones used for grid search
 param_init = {
     'solver': 'lbfgs'
-#    'batch_size': 1,
-#    'solver': 'sgd'
-#    'solver': 'adam'
 }
 
 # Set random seed for consistency
 seed = 4155
-np.random.seed(seed)  # TODO: unsure if necessary since send random state into gridsearch
+np.random.seed(seed)  # unsure if matters here
 
 ########################
 ########################
@@ -80,17 +75,15 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
 
 if not load_data:
     # Create model
-#    rf = RandomForestClassifier(random_state=seed)
-    nn_obj = MLPClassifier(random_state=seed)
+#    nn_obj = MLPClassifier(random_state=seed)
     nn = NeuralNet(**param_init)#nn_obj)
-    # Instantiate the grid search model TODO fix
+    # Initialize grid search model
     grid_search = GridSearchCV(estimator=nn, param_grid=param_grid,
                                cv=5, n_jobs=parallel, verbose=1, iid='deprecated',
                                refit=False)
-                               #return_train_score=True)
 
     t_start = time.time()
-    # Fit the grid search to the data TODO fix
+    # Fit the grid search to the data
     grid_search.fit(X, y)
     t_end = time.time()
 
@@ -98,13 +91,10 @@ if not load_data:
     print('Total time elapsed: %.2f s' % t_tot)
 
     # Dump data or load
-    # TODO: add seed and nbins dependency on pickle names
     joblib.dump(grid_search, pickle + 'grid_search_%s_seed%d_nbins%d_pca%d.pkl' % (param_string, seed, n_bins, n_pca))
 else:
     grid_search = joblib.load(pickle + 'grid_search_%s_seed%d_nbins%d_pca%d.pkl' % (param_string, seed, n_bins, n_pca))
 
-#y_fit = grid_search.predict(X_train)
-#y_pred = grid_search.predict(X_test)
 
 best_params = grid_search.best_params_
 print(best_params)
@@ -114,6 +104,8 @@ best_estimator.fit(X_train, y_train)
 #best_estimator = grid_search.best_estimator_
 best_index = grid_search.best_index_
 
+i_, j_, k_, l_, m_, n_ = np.unravel_index(best_index, n_params)  # indices of best params
+
 # Results matrix for all parameter combinations
 cv_results = grid_search.cv_results_
 test_score = cv_results['mean_test_score']
@@ -121,9 +113,6 @@ test_score = test_score.reshape(n_params)
 
 print('Mean fit time = %.2e s' % np.mean(cv_results['mean_fit_time']))
 
-i_, j_, k_, l_, m_, n_ = np.unravel_index(best_index, n_params)
-
-# TODO: Maybe remove?
 print('### GRID SEARCH RESULTS ###')
 print('Best params:')
 pprint.pprint(grid_search.best_params_)
@@ -137,7 +126,7 @@ y_fit = best_estimator.predict(X_train)
 y_pred = best_estimator.predict(X_test)
 y_proba = best_estimator.predict_proba(X_test)
 
-print('\n### NORMAL DATA TRAIN TEST SPLIT ###')  # TODO: do
+print('\n### NORMAL DATA TRAIN TEST SPLIT ###')
 print('Train accuracy = %.3f' % best_estimator.score(X_train, y_train))
 print('Test accuracy = %.3f' % best_estimator.score(X_test, y_test))
 
@@ -156,10 +145,9 @@ fs = 12
 skplt.metrics.plot_confusion_matrix(y_1, y_2, normalize=True, text_fontsize=fs, title_fontsize=fs+1)
 plt.savefig(fig_path + 'confusion_matrix_%s.png' % save)
 
-#skplt.metrics.plot_roc(y_test, y_proba, text_fontsize=fs, title_fontsize=fs+1)
+# ROC curve
 skplt.metrics.plot_roc(y_1, y_proba, text_fontsize=fs, title_fontsize=fs+1)
 plt.savefig(fig_path + 'roc_%s.png' % save)
-#scikitplot.metrics.plot_roc(y_true, y_probas, title='ROC Curves', plot_micro=True, plot_macro=True, classes_to_plot=None, ax=None, figsize=None, cmap='nipy_spectral', title_fontsize='large', text_fontsize='medium')
 
 # Plot hyperparameter heatmaps in an automatic fashion
 tick_type = ['str', 'exp', 'exp', 'int', 'int', 'int']

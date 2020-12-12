@@ -7,17 +7,13 @@ class NeuralNet:
     An attempt to interface MLPClassifier in a way that makes the hyperparameters related to width/depth more clear.
     We intercept the parameters fetched from MLPClassifier, and translates the parameters into our own
     Before going back to the same as before
-    I have no idea what im doing
     """
     def __init__(self, **params):
-#        print('aa', params)
         self.neuralnet = MLPClassifier(**params)
 
     def fit(self, X, y, **params):
-#        print('aawadawda',params)
         fit = self.neuralnet.fit(X, y)
-        #print(self.neuralnet.get_params())  # so it is actually working
-        return fit#self.neuralnet.fit(X, y) #**params)  # todo: ??????
+        return fit
 
     def predict(self, X):
         return self.neuralnet.predict(X)
