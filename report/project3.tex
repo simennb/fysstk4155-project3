@@ -150,17 +150,17 @@
 % Title/name/date
 \title{FYS-STK4155: Project 3}
 \author{Simen Nyhus Bastnes}
-\date{14. December 2020}
+\date{16. December 2020}
 
 \begin{document}
 \maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-In this project, we want to take a look at audio classification using different machine learning algorithms. The data set we will be looking at is a set of labeled audio files containing either cat or dog sounds. To reduce the complexity of the data set, we transform it into Fourier space, using the binned frequencies as our predictors. Principal component analysis (PCA) is employed to further reduce the predictor set. The classification methods we will be using is a feed-forward neural networks, random forests, and XGBoost. Cross-validation will be used in order to find the optimal hyperparameters.
+In this project, we want to take a look at audio classification using different machine learning algorithms. The data set we will be looking at is a set of labeled audio files containing either cat or dog sounds. To reduce the complexity of the data set, we transform it into Fourier space, using the binned frequencies as our predictors. Principal component analysis (PCA) is employed to further reduce the predictor set. The classification methods we will be using is a feed-forward neural networks, random forests, and XGBoost. In order to find the optimal hyperparameters we employ grid search with cross-validation.% Cross-validation will be used in order to find the optimal hyperparameters.
 %We find that \red{insert results}
 %\red{Better at cats, worse at dogs}
 % SPECIEST!!!
-We find that neural nets and random forest classify the samples with an accuracy of around 90\% for both the normal data set and the reduced data set, with a slight reduction in the PCA reduced results. XGBoost performs the best with almost 95\% accuracy on the full data set, and 93\% on the reduced. Further, we find that the neural net is better at classifying dogs than cats, while random forests and XGBoost classifies cats better.
+We find that neural nets and random forest classify the samples with an accuracy of around 90\% for both the normal data set and the reduced data set, with a slight reduction in the PCA reduced results. XGBoost performs the best with almost 95\% accuracy on the full data set, and 93\% on the reduced. Further, we find that the neural net is better at classifying dogs than cats, while random forests and XGBoost classifies cats better. Random forest and XGBoost far outclasses the neural net speed wise, with random forests being almost 3 times faster than XGBoost for the full data set, but slightly slower than XGBoost for the reduced one.
 
 %We find that all three methods classify the samples with an accuracy of over 90\%, with XGBoost performing the best \red{at 95\%}. For all methods there is a slightly lower accuracy rate for classifying dog samples compared to cats, possibly stemming from the larger variance in spectral characteristics between small and large dogs. \red{PCA}
 %In this project, we want to study a few methods commonly used in data science for both normal regression problems, as well as classification problems. The methods we will be employing are the stochastic gradient descent (SGD) and feed-forward neural networks (FFNN). For regression, we will be looking at is the Franke function studied in the previous project \cite{Github1}, comparing our results to the ones found there. For classification the MNIST database of handwritten digits will be studied. Cross-validation will be used for the hyperparameter search for both problems in order to make sure the model is the optimal one.
@@ -400,14 +400,14 @@ Table \ref{tab:best_fit_nn_nonpca} shows our best-fit hyperparameters for the ne
 Figure \ref{fig:nn_confusion_nonpca} shows the confusion matrix for the best-fit neural net, showing that the model performs quite a bit better at classifying the dog samples (96\%) compared to the cat samples (88\%). This gives us a total accuracy of $0.911$, which is still good.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{../figures/neural_net/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
+	\includegraphics[scale=0.7]{../figures/neural_net/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{Confusion matrix for the neural net, full data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:nn_confusion_nonpca}
 \end{figure}	
 Figure \ref{fig:nn_roc_nonpca} shows the ROC curve for the best-fit neural net. We see that both of the class curves are good, with the same AUC score.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{../figures/neural_net/roc_nbins200_pca0_seed4155_ts0.20.png}
+	\includegraphics[scale=0.6]{../figures/neural_net/roc_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{ROC curve for the neural net, full data set. The AUC is given in the legend.}
 	\label{fig:nn_roc_nonpca}
 \end{figure}	
@@ -432,14 +432,14 @@ For the PCA reduced data set, we run with the same hyperparameter sets as earlie
 Training our neural net with the best-fit parameters we get the following confusion matrix for the PCA reduced data set, shown in figure \ref{fig:nn_confusion_pca}. Here, we see that the true positives remain the same (maybe slight improvement as blue color is a bit darker), while the model loses 4\% at classifying dogs. This could be due to the larger probable variation in frequencies used by dogs of different sizes, and thus when reducing the dimensions, the information lost affects dogs more. The disparity in sample sizes for both classes could also affect this to some extent.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{../figures/neural_net/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
+	\includegraphics[scale=0.7]{../figures/neural_net/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{Confusion matrix for the neural net, PCA reduced data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:nn_confusion_pca}
 \end{figure}	
 Figure \ref{fig:nn_roc_pca} shows the ROC curves for the best-fit neural net. Similar to the full data set, it is hard to tell anything beyond that the models seem to perform well. The AUC is slightly higher than before though, despite the total accuracy for the model decreasing slightly.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{../figures/neural_net/roc_nbins200_pca35_seed4155_ts0.20.png}
+	\includegraphics[scale=0.6]{../figures/neural_net/roc_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{ROC curve for the neural net, PCA reduced data set. The AUC is given in the legend.}
 	\label{fig:nn_roc_pca}
 \end{figure}	
@@ -466,14 +466,14 @@ Table \ref{tab:best_fit_rf_nonpca} shows our best-fit hyperparameters for random
 Figure \ref{fig:rf_confusion_nonpca} shows the confusion matrix for the best-fit random forest. Here, the results are almost inverse of what was found for the neural net. The random forest performs extremely well at classifying cat samples, at 97\% accuracy, while dogs end up with only 83\%. This cat accuracy comes at the cost of dogs, leading our model to guess dogs more often, as seen in the false negatives.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{../figures/random_forest/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
+	\includegraphics[scale=0.7]{../figures/random_forest/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{Confusion matrix for random forests, full data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:rf_confusion_nonpca}
 \end{figure}	
 Figure \ref{fig:rf_roc_nonpca} shows the ROC curve for the random forest. The AUC is the same for both classes, so either something is wrong with our implementation, or it really is as mentioned earlier quite problematic for evaluating model fit.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{../figures/random_forest/roc_nbins200_pca0_seed4155_ts0.20.png}
+	\includegraphics[scale=0.6]{../figures/random_forest/roc_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{ROC curve for random forests, full data set. The AUC is given in the legend.}
 	\label{fig:rf_roc_nonpca}
 \end{figure}	
@@ -499,14 +499,14 @@ Table \ref{tab:best_fit_rf_pca} shows our best-fit hyperparameters for the PCA r
 Figure \ref{fig:rf_confusion_pca} shows the confusion matrix for the random forest with the PCA reduced data set. We see that the predictive power drops for the cat class, however the dog accuracy increases. Similar to the full data set, the results are the opposite of the equivalent neural net result, with the random forest being better at classifying the cat samples rather than dogs.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{../figures/random_forest/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
+	\includegraphics[scale=0.7]{../figures/random_forest/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{Confusion matrix for random forests, PCA reduced data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:rf_confusion_pca}
 \end{figure}	
 Figure \ref{fig:rf_roc_pca} shows the ROC curves for the PCA reduced data set. Here, the curves for both classes are very close to each other, which kinda makes sense given the similar accuracy seen in the confusion matrix. The AUC however is higher than it was for the full data set.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{../figures/random_forest/roc_nbins200_pca35_seed4155_ts0.20.png}
+	\includegraphics[scale=0.6]{../figures/random_forest/roc_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{ROC curve for random forests, PCA reduced data set. The AUC is given in the legend.}
 	\label{fig:rf_roc_pca}
 \end{figure}	
@@ -534,14 +534,14 @@ Table \ref{tab:best_fit_xgboost_nonpca} shows our best-fit hyperparameters for X
 From the best-fit hyperparameters, we get the following confusion matrix for XGBoost, shown in figure \ref{fig:xgboost_confusion_nonpca}. We see that XGBoost performs extremely well for both classes, with a ~95\% accuracy for both classes combined. Like with random forests, XGBoost performs better at classifying cat samples.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{../figures/xgboost/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
+	\includegraphics[scale=0.7]{../figures/xgboost/confusion_matrix_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{Confusion matrix for XGBoost, full data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:xgboost_confusion_nonpca}
 \end{figure}
 Figure \ref{fig:xgboost_roc_nonpca} shows the ROC curves and AUC score for XGBoost. Like previously, it is hard to gauge anything useful from the plot, beyond it performing well.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{../figures/xgboost/roc_nbins200_pca0_seed4155_ts0.20.png}
+	\includegraphics[scale=0.6]{../figures/xgboost/roc_nbins200_pca0_seed4155_ts0.20.png}
 	\caption{ROC curve for XGBoost, full data set. The AUC is given in the legend.}
 	\label{fig:xgboost_roc_nonpca}
 \end{figure}	
@@ -567,7 +567,7 @@ Figure \ref{fig:xgboost_confusion_pca} shows the confusion matrix with XGBoost o
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{../figures/xgboost/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
+	\includegraphics[scale=0.7]{../figures/xgboost/confusion_matrix_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{Confusion matrix for XGBoost, PCA reduced data set. The rows are normalized, showing the ratio of correctly/incorrectly labeled samples for each class.}
 	\label{fig:xgboost_confusion_pca}
 \end{figure}	
@@ -575,7 +575,7 @@ Figure \ref{fig:xgboost_roc_pca} shows the ROC curves and AUC score for the PCA 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{../figures/xgboost/roc_nbins200_pca35_seed4155_ts0.20.png}
+	\includegraphics[scale=0.6]{../figures/xgboost/roc_nbins200_pca35_seed4155_ts0.20.png}
 	\caption{ROC curve for XGBoost, PCA reduced data set. The AUC is given in the legend.}
 	\label{fig:xgboost_roc_pca}
 \end{figure}	
@@ -588,11 +588,11 @@ When using the PCA reduced data set both the neural net and XGBoost decreased th
 %\red{LBFGS is fast, SGD is not, took ~420 ms on average.} 
 \begin{table}[H]
   \centering
-  \caption{Average fit/training time for the three different methods examined, given in milliseconds.}
+  \caption{Average fit/training time for the three different methods examined, given in milliseconds for both the full dimensional data set and the PCA reduced data set.}
   \label{tab:timing}
   \begin{tabular}{c|c|c}
     \hline\hline
-    Method & Time without PCA [$ms$] & Time with PCA [$ms$] \\\hline
+    Method & Time full data set [$ms$] & Time reduced data set [$ms$] \\\hline
 %    Neural net (adam) & 235.0 & 177.0 \\
     Neural net & $732$ & $325$ \\
     Random forest & $28.4$ & $28.3$ \\

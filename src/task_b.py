@@ -29,7 +29,7 @@ test_size = 0.2
 n_bins = 200
 n_pca = 35  # 0 for full data set
 
-load_data = False
+load_data = False  # set to True to bypass running the analysis and load the pickled file (if exists)
 #load_data = True
 
 # Create the parameter grid based on the results of random search
@@ -75,8 +75,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
 
 if not load_data:
     # Create model
-#    nn_obj = MLPClassifier(random_state=seed)
-    nn = NeuralNet(**param_init)#nn_obj)
+    nn = NeuralNet(**param_init)
     # Initialize grid search model
     grid_search = GridSearchCV(estimator=nn, param_grid=param_grid,
                                cv=5, n_jobs=parallel, verbose=1, iid='deprecated',
@@ -101,7 +100,7 @@ print(best_params)
 best_estimator = NeuralNet()
 best_estimator.set_params(**best_params)
 best_estimator.fit(X_train, y_train)
-#best_estimator = grid_search.best_estimator_
+
 best_index = grid_search.best_index_
 
 i_, j_, k_, l_, m_, n_ = np.unravel_index(best_index, n_params)  # indices of best params
@@ -116,7 +115,6 @@ print('Mean fit time = %.2e s' % np.mean(cv_results['mean_fit_time']))
 print('### GRID SEARCH RESULTS ###')
 print('Best params:')
 pprint.pprint(grid_search.best_params_)
-#print('\nTrain accuracy = %.3f' % np.max(cv_results['mean_train_score']))
 print('Test accuracy = %.3f' % grid_search.best_score_)
 
 

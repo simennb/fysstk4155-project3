@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, GridSearchCV
-#from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 import scikitplot as skplt
 import functions as fun
@@ -14,6 +13,8 @@ import pprint
 ########################
 ###### PARAMETERS ######
 ########################
+parallel = -1  # number of jobs to run, -1 = all
+
 data_path = '../datafiles/'
 fig_path = '../figures/xgboost/'
 pickle = data_path + 'xgboost/'
@@ -27,7 +28,7 @@ test_size = 0.2
 n_bins = 200
 n_pca = 35  # 0 for full data set
 
-load_data = False
+load_data = False  # set to True to bypass running the analysis and load the pickled file (if exists)
 #load_data = True
 
 # Set random seed for consistency
@@ -77,7 +78,7 @@ if not load_data:
     xgb = XGBClassifier(**params)
     # Initialize grid search model
     grid_search = GridSearchCV(estimator=xgb, param_grid=param_grid,
-                               cv=5, n_jobs=-1, verbose=1, iid='deprecated',
+                               cv=5, n_jobs=parallel, verbose=1, iid='deprecated',
                                return_train_score=True, scoring='accuracy')
 
     t_start = time.time()

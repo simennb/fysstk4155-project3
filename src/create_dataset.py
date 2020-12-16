@@ -56,6 +56,8 @@ if __name__ == '__main__':
     dog = 'dog_barking_'
     fex = '.wav'
 
+    fs = 16
+
     n_cat = 164
     n_dog = 113
     n_tot = n_cat + n_dog
@@ -83,7 +85,7 @@ if __name__ == '__main__':
             plot_waveform_fft([time, freq_binned], [audio_data, fft_binned],
                               ['Time [s]', 'Frequency [Hz]'], ['Amplitude', 'Amplitude'],
                               [time[0], time[-1]], [freq_binned[0], freq_binned[-1]], 'Cat sample nr. %d' % i,
-                              fig_path + 'cat_%d_nbins%d.png' % (i, n_bins))
+                              fig_path + 'cat_%d_nbins%d.png' % (i, n_bins), fs=fs)
 
     # Looping over all dog audio files
     for i in range(1, n_dog + 1):
@@ -97,7 +99,7 @@ if __name__ == '__main__':
             plot_waveform_fft([time, freq_binned], [audio_data, fft_binned],
                               ['Time [s]', 'Frequency [Hz]'], ['Amplitude', 'Amplitude'],
                               [time[0], time[-1]], [freq_binned[0], freq_binned[-1]], 'Dog sample nr. %d' % i,
-                              fig_path + 'dog_%d_nbins%d.png' % (i, n_bins))
+                              fig_path + 'dog_%d_nbins%d.png' % (i, n_bins), fs=fs)
 
     # Potentially bootstrapping the dataset to have identical amount of cat and dog samples
     boot = True
